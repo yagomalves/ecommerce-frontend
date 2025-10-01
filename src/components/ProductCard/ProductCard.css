@@ -1,0 +1,228 @@
+/* ProductCard.css - Todas as classes com prefixo pc- */
+
+.pc-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  border: 1px solid #e9ecef;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  cursor: pointer;
+}
+
+.pc-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.pc-image-container {
+  position: relative;
+  overflow: hidden;
+  height: 200px;
+  flex-shrink: 0;
+}
+
+.pc-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.pc-card:hover .pc-image {
+  transform: scale(1.05);
+}
+
+.pc-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.pc-card:hover .pc-overlay {
+  opacity: 1;
+}
+
+.pc-quick-view-btn {
+  background: white;
+  color: #2c3e50;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pc-quick-view-btn:hover {
+  background: #3498db;
+  color: white;
+}
+
+.pc-info {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.pc-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.3;
+}
+
+.pc-description {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex-grow: 1;
+  min-height: 2.7em;
+}
+
+.pc-price-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-shrink: 0;
+}
+
+.pc-price {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #27ae60;
+}
+
+.pc-original-price {
+  font-size: 1rem;
+  color: #7f8c8d;
+  text-decoration: line-through;
+}
+
+.pc-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+.pc-add-to-cart-btn {
+  flex: 1;
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+}
+
+.pc-add-to-cart-btn:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+}
+
+.pc-cart-icon {
+  font-size: 1rem;
+}
+
+/* Garante que o botão não herde o cursor do card */
+.pc-actions {
+  cursor: default;
+}
+
+.pc-add-to-cart-btn {
+  cursor: pointer;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  .pc-info {
+    padding: 1rem;
+  }
+
+  .pc-name {
+    font-size: 1.1rem;
+  }
+
+  .pc-price {
+    font-size: 1.2rem;
+  }
+
+  .pc-add-to-cart-btn {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+    min-height: 40px;
+  }
+
+  .pc-description {
+    min-height: 2.5em;
+    -webkit-line-clamp: 2;
+  }
+  /* Adicione estas regras no final do seu ProductCard.css */
+
+  .pc-add-to-cart-btn.loading {
+    background: #95a5a6 !important;
+    cursor: not-allowed !important;
+  }
+
+  .pc-add-to-cart-btn.success {
+    background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+  }
+
+  .pc-loading-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: pc-spin 1s linear infinite;
+  }
+
+  @keyframes pc-spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Melhora o feedback visual do botão */
+  .pc-add-to-cart-btn:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  /* Garante que o texto do botão fique centralizado */
+  .pc-add-to-cart-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+  }
+}
