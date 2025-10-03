@@ -6,12 +6,13 @@ import Footer from "../../components/Footer/Footer";
 import "./ProductDetail.css";
 
 function ProductDetail() {
-  const { id } = useParams();
+  const { slug } = useParams(); // ✅ Agora usando slug
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [seller, setSeller] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null); // ✅ Novo estado para erro
   const [selectedImage, setSelectedImage] = useState(0);
   const [failedImages, setFailedImages] = useState(new Set());
 
@@ -19,18 +20,18 @@ function ProductDetail() {
     async function fetchProductDetails() {
       try {
         setLoading(true);
+        setError(null); // ✅ Limpa erros anteriores
 
-        // Busca TUDO de uma vez - produto, imagens, categoria, reviews e vendedor
+        // ✅ Busca produto por SLUG
         const productRes = await axios.get(
-          `http://127.0.0.1:8000/api/products/${id}`
+          `http://127.0.0.1:8000/api/products/${slug}`
         );
         const productData = productRes.data;
 
-        console.log("Dados completos do produto:", productData); // Para debug
+        console.log("Dados completos do produto:", productData);
 
         setProduct({
           ...productData,
-          // Garante que sempre tenha pelo menos uma imagem
           images:
             productData.images?.length > 0
               ? productData.images
@@ -42,29 +43,28 @@ function ProductDetail() {
                 ],
         });
 
-        // O vendedor já vem no productData.user
         setSeller(productData.user);
-
-        // As reviews já vem no productData.reviews
         setReviews(productData.reviews || []);
       } catch (error) {
         console.error("Failed to load product details:", error);
         console.error("URL tentada:", error.config?.url);
         console.error("Status:", error.response?.status);
-        navigate("/"); // Redireciona para a página inicial
+        
+        // ✅ MUDEI: Em vez de navegar imediatamente, apenas seta o erro
+        setError("Produto não encontrado");
       } finally {
         setLoading(false);
       }
     }
 
     fetchProductDetails();
-  }, [id, navigate]);
+  }, [slug]); // ✅ Removi navigate das dependências
 
   const handleAddToCart = () => {
     console.log(`Produto ${product.name} adicionado ao carrinho!`);
-    // Aqui você pode adicionar a lógica do carrinho depois
   };
 
+  // ✅ Loading state
   if (loading) {
     return (
       <>
@@ -78,6 +78,27 @@ function ProductDetail() {
     );
   }
 
+  // ✅ Error state - mostra mensagem de erro sem redirecionar
+  if (error) {
+    return (
+      <>
+        <Navbar />
+        <div className="error-container">
+          <h2>{error}</h2>
+          <p>O produto que você está procurando não foi encontrado.</p>
+          <button onClick={() => navigate("/")}>
+            Voltar para página inicial
+          </button>
+          <button onClick={() => navigate("/all-products")} style={{marginLeft: '10px'}}>
+            Ver Todos os Produtos
+          </button>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  // ✅ Se não tem produto (fallback)
   if (!product) {
     return (
       <>
@@ -93,13 +114,18 @@ function ProductDetail() {
     );
   }
 
+  // ✅ Renderização normal do produto
   return (
     <>
       <Navbar />
 
       <div className="product-detail-container">
         <div className="breadcrumb">
-          <button onClick={() => navigate("/")}>← Voltar para página inicial</button>
+          <button onClick={() => navigate(-1)}>← Voltar</button>
+          <span>/</span>
+          <button onClick={() => navigate("/all-products")}>Produtos</button>
+          <span>/</span>
+          <span>{product.name}</span>
         </div>
 
         <div className="product-detail-content">
@@ -114,7 +140,6 @@ function ProductDetail() {
                 }
                 alt={product.name}
                 onError={() => {
-                  // Adiciona esta imagem à lista de falhas
                   setFailedImages((prev) => new Set(prev).add(selectedImage));
                 }}
               />

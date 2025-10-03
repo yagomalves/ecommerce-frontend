@@ -25,11 +25,10 @@ function CategoriesBar() {
     fetchCategories();
   }, []);
 
-  const handleCategoryClick = (categoryId, categoryName) => {
-    // Navega para a página de produtos filtrada por categoria
-    navigate(`/products?category=${categoryId}`);
-    // Ou se preferir uma rota específica: navigate(`/categories/${categoryId}/products`);
-    console.log(`Categoria clicada: ${categoryName}`);
+  const handleCategoryClick = (categorySlug, categoryName) => {
+    // ✅ AGORA USA SLUG EM VEZ DE ID
+    navigate(`/products?category=${categorySlug}`);
+    console.log(`Categoria clicada: ${categoryName} (${categorySlug})`);
   };
 
   if (loading) {
@@ -47,7 +46,7 @@ function CategoriesBar() {
           <div
             key={category.id}
             className="category-item"
-            onClick={() => handleCategoryClick(category.id, category.name)}
+            onClick={() => handleCategoryClick(category.slug, category.name)}
           >
             <div className="category-icon">
               {getCategoryIcon(category.name)}
@@ -59,6 +58,8 @@ function CategoriesBar() {
     </div>
   );
 }
+
+
 
 // Função para retornar ícones baseados no nome da categoria
 function getCategoryIcon(categoryName) {

@@ -57,7 +57,7 @@ function ProductCard({ product }) {
   };
 
   const handleViewDetails = () => {
-    navigate(`/product/${product.id}`);
+    navigate(`/product/${product.slug}`);
   };
 
   const handleImageError = (e) => {

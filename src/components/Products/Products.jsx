@@ -72,7 +72,11 @@ function Products() {
           
           <div className="product-grid">
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard 
+                key={product.id} 
+                product={product} 
+                // ✅ AGORA O ProductCard RECEBE O PRODUCT COMPLETO COM SLUG
+              />
             ))}
           </div>
 
