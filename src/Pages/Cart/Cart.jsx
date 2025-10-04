@@ -16,11 +16,11 @@ function Cart() {
   const fetchCartItems = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('auth_token');
-      
-      const response = await fetch('http://127.0.0.1:8000/api/cart-items', {
+      const token = localStorage.getItem("auth_token");
+
+      const response = await fetch("http://127.0.0.1:8000/api/cart-items", {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -29,7 +29,7 @@ function Cart() {
         setCartItems(data.data || []);
       }
     } catch (error) {
-      console.error('Erro ao carregar carrinho:', error);
+      console.error("Erro ao carregar carrinho:", error);
     } finally {
       setLoading(false);
     }
@@ -40,25 +40,30 @@ function Cart() {
 
     try {
       setUpdating(true);
-      const token = localStorage.getItem('auth_token');
+      const token = localStorage.getItem("auth_token");
 
-      const response = await fetch(`http://127.0.0.1:8000/api/cart-items/${cartItemId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ quantity: newQuantity })
-      });
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/cart-items/${cartItemId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ quantity: newQuantity }),
+        }
+      );
 
       if (response.ok) {
         // Atualiza localmente
-        setCartItems(prev => prev.map(item => 
-          item.id === cartItemId ? { ...item, quantity: newQuantity } : item
-        ));
+        setCartItems((prev) =>
+          prev.map((item) =>
+            item.id === cartItemId ? { ...item, quantity: newQuantity } : item
+          )
+        );
       }
     } catch (error) {
-      console.error('Erro ao atualizar quantidade:', error);
+      console.error("Erro ao atualizar quantidade:", error);
     } finally {
       setUpdating(false);
     }
@@ -66,33 +71,39 @@ function Cart() {
 
   const removeItem = async (cartItemId) => {
     try {
-      const token = localStorage.getItem('auth_token');
+      const token = localStorage.getItem("auth_token");
 
-      const response = await fetch(`http://127.0.0.1:8000/api/cart-items/${cartItemId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/cart-items/${cartItemId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.ok) {
-        setCartItems(prev => prev.filter(item => item.id !== cartItemId));
+        setCartItems((prev) => prev.filter((item) => item.id !== cartItemId));
       }
     } catch (error) {
-      console.error('Erro ao remover item:', error);
+      console.error("Erro ao remover item:", error);
     }
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    return cartItems.reduce(
+      (total, item) => total + Number(item.product.price) * item.quantity,
+      0
+    );
   };
 
   const proceedToCheckout = () => {
-    navigate('/checkout');
+    navigate("/checkout");
   };
 
   const continueShopping = () => {
-    navigate('/');
+    navigate("/");
   };
 
   if (loading) {
@@ -132,27 +143,32 @@ function Cart() {
         ) : (
           <div className="cart-content">
             <div className="cart-items">
-              {cartItems.map(item => (
+              {cartItems.map((item) => (
                 <div key={item.id} className="cart-item">
                   <div className="item-image">
-                    <img 
-                      src={item.product.imageUrl || "https://via.placeholder.com/100x100?text=Produto"} 
+                    <img
+                      src={
+                        item.product.imageUrl ||
+                        "https://via.placeholder.com/100x100?text=Produto"
+                      }
                       alt={item.product.name}
                     />
                   </div>
                   <div className="item-details">
                     <h3>{item.product.name}</h3>
-                    <p className="item-price">R$ {item.price.toFixed(2)}</p>
+                    <p className="item-price">
+                      R$ {item.product.price.toFixed(2)}
+                    </p>
                   </div>
                   <div className="item-quantity">
-                    <button 
+                    <button
                       onClick={() => updateQuantity(item.id, item.quantity - 1)}
                       disabled={updating || item.quantity <= 1}
                     >
                       -
                     </button>
                     <span>{item.quantity}</span>
-                    <button 
+                    <button
                       onClick={() => updateQuantity(item.id, item.quantity + 1)}
                       disabled={updating}
                     >
@@ -160,9 +176,9 @@ function Cart() {
                     </button>
                   </div>
                   <div className="item-total">
-                    R$ {(item.price * item.quantity).toFixed(2)}
+                    R$ {(item.product.price * item.quantity).toFixed(2)}
                   </div>
-                  <button 
+                  <button
                     className="remove-btn"
                     onClick={() => removeItem(item.id)}
                     disabled={updating}
@@ -187,10 +203,7 @@ function Cart() {
                 <span>Total:</span>
                 <span>R$ {calculateTotal().toFixed(2)}</span>
               </div>
-              <button 
-                className="checkout-btn"
-                onClick={proceedToCheckout}
-              >
+              <button className="checkout-btn" onClick={proceedToCheckout}>
                 Finalizar Compra
               </button>
             </div>

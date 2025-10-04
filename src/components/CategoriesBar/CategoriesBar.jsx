@@ -25,11 +25,11 @@ function CategoriesBar() {
     fetchCategories();
   }, []);
 
-  const handleCategoryClick = (categorySlug, categoryName) => {
-    // ✅ AGORA USA SLUG EM VEZ DE ID
-    navigate(`/products?category=${categorySlug}`);
-    console.log(`Categoria clicada: ${categoryName} (${categorySlug})`);
-  };
+  const handleCategoryClick = (categoryId, categoryName) => {
+  navigate(`/categories/${categoryId}`, {
+    state: { categoryName: categoryName }
+  });
+};
 
   if (loading) {
     return (
@@ -43,76 +43,74 @@ function CategoriesBar() {
     <div className="categories-bar">
       <div className="categories-container">
         {categories.map((category) => (
-          <div
-            key={category.id}
-            className="category-item"
-            onClick={() => handleCategoryClick(category.slug, category.name)}
-          >
-            <div className="category-icon">
-              {getCategoryIcon(category.name)}
-            </div>
-            <span className="category-name">{category.name}</span>
-          </div>
-        ))}
+  <div
+    key={category.id}
+    className="category-item"
+    onClick={() => handleCategoryClick(category.id, category.name)}
+  >
+    <div className="category-icon">
+      {getCategoryIcon(category.name)}
+    </div>
+    <span className="category-name">{category.name}</span>
+  </div>
+))}
       </div>
     </div>
   );
 }
 
-
-
 // Função para retornar ícones baseados no nome da categoria
 function getCategoryIcon(categoryName) {
   const icons = {
     // Tecnologia
-    'Smartphones': '📱',
-    'Computadores': '💻',
-    'Eletrônicos': '🔌',
-    'Tablets': '📟',
-    'Games': '🎮',
-    
+    Smartphones: "📱",
+    Computadores: "💻",
+    Eletrônicos: "🔌",
+    Tablets: "📟",
+    Games: "🎮",
+
     // Moda
-    'Roupas': '👕',
-    'Calçados': '👟',
-    'Acessórios': '👓',
-    
+    Roupas: "👕",
+    Calçados: "👟",
+    Acessórios: "👓",
+
     // Casa
-    'Casa': '🏠',
-    'Decoração': '🖼️',
-    'Móveis': '🛋️',
-    
+    Casa: "🏠",
+    Decoração: "🖼️",
+    Móveis: "🛋️",
+
     // Esportes
-    'Esportes': '⚽',
-    'Fitness': '💪',
-    
+    Esportes: "⚽",
+    Fitness: "💪",
+
     // Beleza
-    'Beleza': '💄',
-    'Cosméticos': '🧴',
-    
+    Beleza: "💄",
+    Cosméticos: "🧴",
+
     // Livros
-    'Livros': '📚',
-    'Educação': '🎓',
-    
+    Livros: "📚",
+    Educação: "🎓",
+
     // Default
-    'default': '📦'
+    default: "📦",
   };
 
   // Procura por palavras-chave no nome da categoria
   const name = categoryName.toLowerCase();
-  if (name.includes('phone') || name.includes('celular')) return '📱';
-  if (name.includes('computador') || name.includes('laptop')) return '💻';
-  if (name.includes('tablet')) return '📟';
-  if (name.includes('game') || name.includes('console')) return '🎮';
-  if (name.includes('roupa') || name.includes('vestuário')) return '👕';
-  if (name.includes('calçado') || name.includes('sapato')) return '👟';
-  if (name.includes('casa') || name.includes('lar')) return '🏠';
-  if (name.includes('decor') || name.includes('decoração')) return '🖼️';
-  if (name.includes('móvel') || name.includes('moveis')) return '🛋️';
-  if (name.includes('esporte')) return '⚽';
-  if (name.includes('fitness') || name.includes('academia')) return '💪';
-  if (name.includes('beleza') || name.includes('cosmético')) return '💄';
-  if (name.includes('livro') || name.includes('leitura')) return '📚';
-  
+  if (name.includes("phone") || name.includes("celular")) return "📱";
+  if (name.includes("computador") || name.includes("laptop")) return "💻";
+  if (name.includes("tablet")) return "📟";
+  if (name.includes("game") || name.includes("console")) return "🎮";
+  if (name.includes("roupa") || name.includes("vestuário")) return "👕";
+  if (name.includes("calçado") || name.includes("sapato")) return "👟";
+  if (name.includes("casa") || name.includes("lar")) return "🏠";
+  if (name.includes("decor") || name.includes("decoração")) return "🖼️";
+  if (name.includes("móvel") || name.includes("moveis")) return "🛋️";
+  if (name.includes("esporte")) return "⚽";
+  if (name.includes("fitness") || name.includes("academia")) return "💪";
+  if (name.includes("beleza") || name.includes("cosmético")) return "💄";
+  if (name.includes("livro") || name.includes("leitura")) return "📚";
+
   return icons[categoryName] || icons.default;
 }
 
