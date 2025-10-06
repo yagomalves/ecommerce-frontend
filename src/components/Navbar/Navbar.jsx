@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Navbar.css";
-import CartIcon from "../CartIcon/CartIcon";
 
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const handleCartClick = () => {
+    navigate("/cart");
+  };
 
   const isAuthPage = location.pathname === "/auth";
   const isProfilePage = location.pathname === "/profile";
@@ -18,9 +21,9 @@ function Navbar() {
   }, []);
 
   const checkAuthStatus = () => {
-    const token = localStorage.getItem('auth_token');
-    const userData = localStorage.getItem('user');
-    
+    const token = localStorage.getItem("auth_token");
+    const userData = localStorage.getItem("user");
+
     if (token && userData) {
       setIsLoggedIn(true);
       setUser(JSON.parse(userData));
@@ -33,16 +36,16 @@ function Navbar() {
   // Função para fazer logout
   const handleLogout = () => {
     // Remove os dados do localStorage
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user');
-    
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("user");
+
     // Atualiza o estado
     setIsLoggedIn(false);
     setUser(null);
-    
+
     // Redireciona para a página inicial
-    navigate('/');
-    
+    navigate("/");
+
     console.log("Logout realizado com sucesso!");
   };
 
@@ -67,19 +70,21 @@ function Navbar() {
           {isLoggedIn ? (
             <div className="navbar-user-menu">
               <span className="welcome-message">
-                Olá, {user?.name || 'Usuário'}!
+                Olá, {user?.name || "Usuário"}!
               </span>
-              
+
               {/* Ícone do Carrinho */}
-              <CartIcon />
-              
+              <div className="cart-icon" onClick={handleCartClick}>
+                🛒
+              </div>
+
               {/* Mostra o botão Perfil apenas se NÃO estiver na página de perfil */}
               {!isProfilePage && (
                 <Link to="/profile" className="profile-link">
                   Perfil
                 </Link>
               )}
-              
+
               <button onClick={handleLogout} className="logout-btn">
                 Sair
               </button>
