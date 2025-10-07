@@ -8,6 +8,7 @@ import EditPersonal from "./Pages/EditPersonal/EditPersonal";
 import EditContact from "./Pages/EditContact/EditContact";
 import Cart from "./Pages/Cart/Cart";
 import CategoryProducts from "./Pages/CategoryProducts/CategoryProducts";
+import CreateProduct from "./Pages/CreateProduct/CreateProduct";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/profile/edit-contact" element={<EditContact />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/categories/:categoryId" element={<CategoryProducts/>} />  
+        <Route path="/create-product" element={<CreateProduct />} />
       </Routes>
     </Router>
   );

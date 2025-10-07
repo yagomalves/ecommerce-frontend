@@ -5,6 +5,8 @@ import Footer from "../../components/Footer/Footer"; // Importe o Footer
 import ProductCard from "../../components/ProductCard/ProductCard";
 import "./AllProducts.css";
 
+const response = await fetch('http://127.0.0.1:8000/api/products?include=images');
+
 function AllProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
