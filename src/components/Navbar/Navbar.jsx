@@ -12,8 +12,19 @@ function Navbar() {
     navigate("/cart");
   };
 
+  const handleAdvertiseClick = () => {
+    if (isLoggedIn) {
+      // Redireciona para a página de cadastro de produto se estiver autenticado
+      navigate("/create-product");
+    } else {
+      // Redireciona para a página de autenticação se não estiver logado
+      navigate("/auth");
+    }
+  };
+
   const isAuthPage = location.pathname === "/auth";
   const isProfilePage = location.pathname === "/profile";
+  const isProductRegisterPage = location.pathname === "/create-product";
 
   // Verifica se o usuário está logado ao carregar o componente
   useEffect(() => {
@@ -67,6 +78,16 @@ function Navbar() {
       {/* Direita - Login/Cadastro ou Perfil/Logout */}
       {!isAuthPage && (
         <div className="navbar-user">
+          {/* Botão Anuncie - aparece para todos os usuários */}
+          {!isProductRegisterPage && (
+            <button 
+              onClick={handleAdvertiseClick} 
+              className="advertise-btn"
+            >
+              Anuncie
+            </button>
+          )}
+
           {isLoggedIn ? (
             <div className="navbar-user-menu">
               <span className="welcome-message">

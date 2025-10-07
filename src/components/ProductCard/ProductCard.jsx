@@ -6,7 +6,24 @@ function ProductCard({ product }) {
   const imageErrorRef = useRef(false);
   const [addingToCart, setAddingToCart] = useState(false);
   const [cartMessage, setCartMessage] = useState('');
+  const [imageLoaded, setImageLoaded] = useState(false);
   const navigate = useNavigate();
+
+  // Função para obter a URL da imagem principal
+  const getImageUrl = () => {
+    // Tenta acessar as imagens do relacionamento
+    if (product.images && product.images.length > 0) {
+      return product.images[0].image_url;
+    }
+    
+    // Fallback para outras propriedades possíveis
+    if (product.image_url) return product.image_url;
+    if (product.imageUrl) return product.imageUrl;
+    if (product.image) return product.image;
+    if (product.main_image) return product.main_image;
+    
+    return "https://via.placeholder.com/300x200?text=No+Image";
+  };
 
   const handleAddToCart = async (e) => {
     e.stopPropagation();
@@ -38,9 +55,7 @@ function ProductCard({ product }) {
 
       if (response.ok) {
         setCartMessage('✅ Adicionado ao carrinho!');
-        console.log('Produto adicionado ao carrinho!', data);
         
-        // Limpa a mensagem após 2 segundos
         setTimeout(() => {
           setCartMessage('');
         }, 2000);
@@ -67,14 +82,23 @@ function ProductCard({ product }) {
     }
   };
 
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+
   return (
     <div className="pc-card" onClick={handleViewDetails}>
       <div className="pc-image-container">
+        {!imageLoaded && (
+          <div className="pc-image-placeholder">Carregando...</div>
+        )}
         <img 
-          src={product.imageUrl}
+          src={getImageUrl()}
           alt={product.name}
           className="pc-image"
           onError={handleImageError}
+          onLoad={handleImageLoad}
+          style={{ display: imageLoaded ? 'block' : 'none' }}
         />
         
         <div className="pc-overlay">
